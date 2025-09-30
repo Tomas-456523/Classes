@@ -5,8 +5,13 @@
 */
 
 #include <iostream>
+#include <vector>
+#include "media.h"
+#include "videogame.h"
+#include "music.h"
+#include "movie.h"
 using namespace std;
 
 int main() {
-
+	vector<Media*>* mediaPointers = new vector<Media*>();
 }
