@@ -19,5 +19,5 @@ void Media::setYear(int _year) {
 	year = _year;
 }
 Media::~Media() {
-
+	
 }
