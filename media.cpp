@@ -3,8 +3,10 @@
 using namespace std;
 
 Media::Media() {
-	//strcpy(title, "a\0");
-	//year = 0;
+	strcpy(type, "media\0");
+}
+char* Media::getType() {
+	return type;
 }
 char* Media::getTitle() {
 	return title;
@@ -20,4 +22,35 @@ void Media::setYear(int _year) {
 }
 Media::~Media() {
 	
+}
+
+char* Media::getArtist() {
+	return NULL;
+}
+char* Media::getDirector() {
+	return NULL;
+}
+char* Media::getPublisher() {
+	return NULL;
+}
+float Media::getDuration() {
+	return 0;
+}
+char* Media::getRating() {
+	return NULL;
+}
+void Media::setArtist(char _artist[255]) {
+
+}
+void Media::setDirector(char _director[255]) {
+
+}
+void Media::setPublisher(char _publisher[255]) {
+
+}
+void Media::setDuration(float _duration) {
+
+}
+void Media::setRating(char _rating[6]) {
+
 }

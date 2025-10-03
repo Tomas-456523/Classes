@@ -3,7 +3,7 @@
 using namespace std;
 
 Movie::Movie() {
-
+	strcpy(type, "movie\0");
 }
 char* Movie::getDirector() {
 	return director;
@@ -14,7 +14,7 @@ char* Movie::getRating() {
 float Movie::getDuration() {
 	return duration;
 }
-void Movie::setDirector(char _director[256]) {
+void Movie::setDirector(char _director[255]) {
 	strcpy(director, _director);
 }
 void Movie::setRating(char _rating[6]) {

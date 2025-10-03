@@ -7,15 +7,15 @@ class Music : public Media {
 public:
 	Music();
 	virtual ~Music();
-	char* getArtist();
-	char* getPublisher();
-	float getDuration();
-	void setArtist(char _artist[256]);
-	void setPublisher(char _publisher[256]);
-	void setDuration(float _duration);
+	virtual char* getArtist();
+	virtual char* getPublisher();
+	virtual float getDuration();
+	virtual void setArtist(char _artist[255]);
+	virtual void setPublisher(char _publisher[255]);
+	virtual void setDuration(float _duration);
 protected:
-	char artist[256];
-	char publisher[256];
+	char artist[255];
+	char publisher[255];
 	float duration;
 };
 #endif
