@@ -15,14 +15,16 @@ public:
 	virtual char* getArtist();
 	virtual char* getDirector();
 	virtual char* getPublisher();
-	virtual float getDuration();
+	virtual int getDuration();
 	virtual char* getRating();
 
 	virtual void setArtist(char _artist[255]);
 	virtual void setDirector(char _director[255]);
 	virtual void setPublisher(char _publisher[255]);
-	virtual void setDuration(float _duration);
+	virtual void setDuration(int _duration);
 	virtual void setRating(char _rating[6]);
+
+	virtual void printSelf();
 protected:
 	char type[6];
 	char title[255];

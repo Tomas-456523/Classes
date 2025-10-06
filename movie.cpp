@@ -1,4 +1,5 @@
 #include <cstring>
+#include <iostream>
 #include "movie.h"
 using namespace std;
 
@@ -11,7 +12,7 @@ char* Movie::getDirector() {
 char* Movie::getRating() {
 	return rating;
 }
-float Movie::getDuration() {
+int Movie::getDuration() {
 	return duration;
 }
 void Movie::setDirector(char _director[255]) {
@@ -20,8 +21,11 @@ void Movie::setDirector(char _director[255]) {
 void Movie::setRating(char _rating[6]) {
 	strcpy(rating, _rating);
 }
-void Movie::setDuration(float _duration) {
+void Movie::setDuration(int _duration) {
 	duration = _duration;
+}
+void Movie::printSelf() {
+	cout << title << ", " << year << ", directed by " << director << ", rated " << rating << ", duration is " << duration / 60 << ":" << duration % 60;
 }
 Movie::~Movie() {
 

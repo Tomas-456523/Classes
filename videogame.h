@@ -12,6 +12,8 @@ public:
 	virtual char* getRating();
 	virtual void setPublisher(char _publisher[255]);
 	virtual void setRating(char _rating[6]);
+
+	virtual void printSelf();
 protected:
 	char publisher[255];
 	char rating[6];

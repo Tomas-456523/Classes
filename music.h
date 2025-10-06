@@ -9,13 +9,15 @@ public:
 	virtual ~Music();
 	virtual char* getArtist();
 	virtual char* getPublisher();
-	virtual float getDuration();
+	virtual int getDuration();
 	virtual void setArtist(char _artist[255]);
 	virtual void setPublisher(char _publisher[255]);
-	virtual void setDuration(float _duration);
+	virtual void setDuration(int _duration);
+
+	virtual void printSelf();
 protected:
 	char artist[255];
 	char publisher[255];
-	float duration;
+	int duration;
 };
 #endif

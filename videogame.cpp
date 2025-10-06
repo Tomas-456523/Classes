@@ -1,4 +1,5 @@
 #include <cstring>
+#include <iostream>
 #include "videogame.h"
 using namespace std;
 
@@ -16,6 +17,9 @@ void VideoGame::setPublisher(char _publisher[255]) {
 }
 void VideoGame::setRating(char _rating[6]) {
 	strcpy(rating, _rating);
+}
+void VideoGame::printSelf() {
+	cout << title << ", " << year << ", published by " << publisher << ", rated " << rating;
 }
 VideoGame::~VideoGame() {
 

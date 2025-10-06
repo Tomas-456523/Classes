@@ -33,7 +33,7 @@ char* Media::getDirector() {
 char* Media::getPublisher() {
 	return NULL;
 }
-float Media::getDuration() {
+int Media::getDuration() {
 	return 0;
 }
 char* Media::getRating() {
@@ -48,9 +48,12 @@ void Media::setDirector(char _director[255]) {
 void Media::setPublisher(char _publisher[255]) {
 
 }
-void Media::setDuration(float _duration) {
+void Media::setDuration(int _duration) {
 
 }
 void Media::setRating(char _rating[6]) {
+
+}
+void Media::printSelf() {
 
 }
