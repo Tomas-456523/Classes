@@ -8,6 +8,7 @@
 #include <vector>
 #include <cstring>
 #include <limits>
+#include <algorithm>
 #include "media.h"
 #include "videogame.h"
 #include "music.h"
@@ -25,6 +26,28 @@ void CinIgnoreAll() {
 		cin.clear();
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 	}
+}
+
+//returns true or false based on if the user responds y or n to the given question; copied and edited from my StudentList project
+bool AskYN(char message[255]) {
+	//repeats the question until the user gives a valid response
+	bool continuing = true;
+	char response[2]; 
+	while (continuing) {
+		cout << message << " (y/n)\n> "; //asks the question plus instructions on what to input
+		cin.getline(response, 2);
+		//error message if neither y or n entered
+		if (strcmp(response, "y") && strcmp(response, "n")) {
+			cout << "\nPlease answer either y or n.";
+			CinIgnoreAll(); //clears error flag
+		} else { //exit loop if y or n given
+			continuing = false;
+		}
+	} //returns true if y or false if n
+	CinIgnoreAll();
+	if (strcmp(response, "n")) {
+		return true;
+	} return false;
 }
 
 void AddMedia(vector<Media*>* mediaPointers) {
@@ -71,6 +94,7 @@ void AddMedia(vector<Media*>* mediaPointers) {
 	while (continuing) {
 		cout << "Enter the year of publication.\n> ";
 		cin >> year;
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		if (!cin) {
 			cout << "\nInvalid input; must be an integer.\n";
 			CinIgnoreAll();
@@ -114,15 +138,19 @@ void AddMedia(vector<Media*>* mediaPointers) {
 
 	//get duration for music and movies
 	if (!strcmp(type, "music") || !strcmp(type, "movie")) {
+		continuing = true;
 		int duration = 0;
-		while (duration == 0) {
+		while (continuing) {
 			cout << "Enter the duration of the " << type << " (seconds).\n> ";
 			cin >> duration;
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 			if (!cin) {
 				cout << "\nInvalid input; must be an integer.\n";
 				CinIgnoreAll();
-			} else if (duration <= 0) {
-				cout << "\nInvalid input, must be greater than 0.\n";
+			} else if (duration < 0) {
+				cout << "\nInvalid input; must be at least 0.\n";
+			} else {
+				continuing = false;
 			}
 		}
 		newMedia->setDuration(duration);
@@ -181,10 +209,11 @@ vector<Media*> SearchMedia(vector<Media*>* mediaPointers) {
 		cin.getline(searchType, 6);
 		AllCaps(searchType);
 
+		CinIgnoreAll();
 		if (!strcmp(searchType, "HELP")) {
-			cout << "\nValid search types:\nTITLE\nYEAR\n\n";
-		} else if (strcmp(searchType, "TITLE") && strcmp(searchType, "YEAR")) {
-			cout << "\nInvalid search type (type HELP for help).\n";
+			cout << "\nValid search types:\nTITLE\nYEAR\nALL\n";
+		} else if (strcmp(searchType, "TITLE") && strcmp(searchType, "YEAR") && strcmp(searchType, "ALL")) {
+			cout << "\nInvalid search type (type HELP for help).";
 		} else {
 			continuing = false;
 		}
@@ -193,20 +222,26 @@ vector<Media*> SearchMedia(vector<Media*>* mediaPointers) {
 	char title[255];
 	int year;
 
+	char* titlePointer = &title[0];
+	char _title[255];
+	char* _titlePointer = &_title[0];
+
 	if (!strcmp(searchType, "TITLE")) {
 		cout << "\nSearch for title.\n> ";
 		cin.getline(title, 255);
+		AllCaps(titlePointer);
 		CinIgnoreAll();
-	} else {
+	} else if (!strcmp(searchType, "YEAR")) {
 		bool continuing = true;
 		while (continuing) {
 			cout << "Search for year.\n> ";
 			cin >> year;
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 			if (!cin) {
 				cout << "\nInvalid input; must be an integer.\n";
 				CinIgnoreAll();
 			} else if (year <= 0) {
-				cout << "\nInvalid input, must be greater than 0.\n";
+				cout << "\nInvalid input; must be greater than 0.\n";
 			} else {
 				continuing = false;
 			}
@@ -214,11 +249,14 @@ vector<Media*> SearchMedia(vector<Media*>* mediaPointers) {
 	}
 
 	for (Media* mediaPointer : (*mediaPointers)) {
-		char _title[255];
 		strcpy(_title, mediaPointer->getTitle());
+		AllCaps(_titlePointer);
+
 		if (!strcmp(searchType, "TITLE") && !strcmp(_title, title)) {
 			matches.push_back(mediaPointer);
-		} else if (mediaPointer->getYear() == year) {
+		} else if (!strcmp(searchType, "YEAR") && mediaPointer->getYear() == year) {
+			matches.push_back(mediaPointer);
+		} else if (!strcmp(searchType, "ALL")) {
 			matches.push_back(mediaPointer);
 		}
 	}
@@ -227,34 +265,91 @@ vector<Media*> SearchMedia(vector<Media*>* mediaPointers) {
 }
 
 void DeleteMedia(vector<Media*>* mediaPointers) {
+	vector<Media*> foundMedia = SearchMedia(mediaPointers);
 
+	if (foundMedia.size() == 0) {
+		cout << "\nNo matching media found.\n";
+		return;
+	}
+
+	int i = 0;
+	cout << "\nMatching media found:";
+	for (Media* media : foundMedia) {
+		i++;
+		cout << "\n" << i << " - ";
+		media->printSelf();
+	}
+	cout << "\n";
+
+	int toDelID;
+	bool continuing = true;
+	while (continuing) {
+		cout << "Choose media # to delete (0 to cancel).\n> ";
+		cin >> toDelID;
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		if (!cin) {
+			cout << "\nInvalid input; must be an integer.\n";
+			CinIgnoreAll();
+		} else if (toDelID == 0) {
+			cout << "\nMedia deletion canceled.\n";
+			return;
+		} else if (toDelID < 0) {
+			cout << "\nInvalid input; must be at least 0.\n";
+		} else if (toDelID > i) {
+			cout << "\nInvalid input; does not match any found media.\n";
+		} else {
+			continuing = false;
+		}
+	}
+
+	Media* toDelMedia = foundMedia[toDelID-1];
+
+	char message[255] = "\nAre you sure you would like to delete this media?";
+	bool yesDelete = AskYN(message);
+
+	if (yesDelete) {
+		delete toDelMedia;
+		mediaPointers->erase(remove(mediaPointers->begin(), mediaPointers->end(), toDelMedia), mediaPointers->end());
+		foundMedia.erase(remove(foundMedia.begin(), foundMedia.end(), toDelMedia), foundMedia.end());
+		cout << "\nMedia successfully deleted!\n";
+	} else {
+		cout << "\nMedia deletion canceled.\n";
+	}
 }
 
 int main() {
-	cout << "'Morning. I am Media Manager Man.\n";
+	cout << "Marvelous morning. I am Media Manager Man.\nEnter HELP for help.\n\n";
 	vector<Media*>* mediaPointers = new vector<Media*>();
 
 	char action[7];
 	char* actionPointer = &action[0];
 
 	bool continuing = true;
+
 	while (continuing) {
 		cout << "What would you like to do?\n> ";
 		cin.getline(action, 7);
 
 		AllCaps(actionPointer);
 		
-		if (!strcmp(action, "ADD")) {
+		if (!strcmp(action, "HELP")) {
+			cout << "\nAvailable commands:\nHELP\nADD\nSEARCH\nDELETE\nQUIT\n";
+		} else if (!strcmp(action, "ADD")) {
 			AddMedia(mediaPointers);
 		} else if (!strcmp(action, "SEARCH")) {
 			vector<Media*> foundMedia = SearchMedia(mediaPointers);
 
-			cout << "\nMatching media found: \n";
+			int i = 0;
+			cout << "\nMatching media found:";
 			for (Media* media : foundMedia) {
-				cout << "\n";
+				i++;
+				cout << "\n" << i << " - ";
 				media->printSelf();
 			}
-			cout << "\n";
+			if (foundMedia.size() == 0) {
+				cout << "\n*cricket noises*";
+			}
+			cout << "\n\n";
 		} else if (!strcmp(action, "DELETE")) {
 			DeleteMedia(mediaPointers);
 		} else if (!strcmp(action, "QUIT")) {

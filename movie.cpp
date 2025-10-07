@@ -25,7 +25,11 @@ void Movie::setDuration(int _duration) {
 	duration = _duration;
 }
 void Movie::printSelf() {
-	cout << title << ", " << year << ", directed by " << director << ", rated " << rating << ", duration is " << duration / 60 << ":" << duration % 60;
+	cout << title << ", " << year << ", directed by " << director << ", rated " << rating << ", duration is " << duration / 60 << ":";
+	if (duration % 60 < 10) {
+		cout << "0";
+	}
+	cout << duration % 60;
 }
 Movie::~Movie() {
 

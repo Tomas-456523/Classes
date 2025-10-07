@@ -25,7 +25,11 @@ void Music::setDuration(int _duration) {
 	duration = _duration;
 }
 void Music::printSelf() {
-	cout << title << ", " << year << ", made by " << artist << "published by " << publisher << ", duration is " << duration/60 << ":" << duration%60;
+	cout << title << ", " << year << ", made by " << artist << ", published by " << publisher << ", duration is " << duration/60 << ":";
+	if (duration % 60 < 10) {
+		cout << "0";
+	}
+	cout << duration % 60;
 }
 Music::~Music() {
 
