@@ -1,10 +1,14 @@
-#include <cstring>
+//this file defines the main parent media class
+
+#include <cstring> //import necessary modules
 #include "media.h"
 using namespace std;
 
+//on creation, clarifies that this is type "media"
 Media::Media() {
 	strcpy(type, "media\0");
 }
+//these are functions that every subclass has
 char* Media::getType() {
 	return type;
 }
@@ -20,10 +24,11 @@ void Media::setTitle(char _title[255]) {
 void Media::setYear(int _year) {
 	year = _year;
 }
+//destructor function
 Media::~Media() {
 	
 }
-
+//these are all placeholder functions that the subclasses may use
 char* Media::getArtist() {
 	return NULL;
 }
@@ -54,6 +59,7 @@ void Media::setDuration(int _duration) {
 void Media::setRating(char _rating[6]) {
 
 }
+//prints all of the object's data, formatted differently by each subclass
 void Media::printSelf() {
 
 }
